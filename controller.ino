@@ -19,14 +19,13 @@ const char* ssid = "010";
 const char* password = "20031201";
 String topicString = "724UGCAR";//输入自己的特定主题名，能保证别人不和你重复就行
 const char* mqttServer1 = "test.ranye-iot.net";
-const char* mqttServer2 = "8.142.157.58";//这是我个人服务器，还有10天到期，大家也能将就用用
 int port=1883;//MQTT服务器端口
 int isFxfz=0;//如果舵机方向反了，就把它改成1
 //Now配置区👇👇👇
 uint8_t broadcastAddress[] = {0xA8, 0x48, 0xFA, 0xE2, 0x29, 0xA7};//此为8266接收机的Mac地址
 
 
-//以下代码无需改动👇👇👇
+
 int address0=0;
 int Ym,Fx,Ym0,Fx0,Fire,isFire,FireFx,FireReady,isFirstMedian,isFirstMode,isRun,FxMedian,YmMedian;
 int YmTrim,FxTrim;//方向微调
@@ -179,24 +178,23 @@ void beginMode(){
   delay(500);
  while(1)
  {ShowMode();
-  u8g2.drawUTF8(10, 25, "N/A");
-  u8g2.drawUTF8(10, 38, "MQTT");
-  u8g2.drawUTF8(10, 51, "摇杆调整");
+  // u8g2.drawUTF8(10, 25, "N/A");
+  u8g2.drawUTF8(10, 25, "MQTT");
+  u8g2.drawUTF8(10, 38, "摇杆调整");
   u8g2.setFont(u8g2_font_adventurer_t_all);
-  if(Mode=="Now")
-    {u8g2.drawGlyph(0,26,0x25ba);
-     if(analogRead(CH2)<1000)
-       {Mode="MQTT";}
-    }
-  else if(Mode=="MQTT")
-  { u8g2.drawGlyph(0,39,0x25ba);
-    if(analogRead(CH2)>3000)
-      {Mode="Now";}
-    else if(analogRead(CH2)<1000)
+  // if(Mode=="Now")
+  //   {u8g2.drawGlyph(0,26,0x25ba);
+  //    if(analogRead(CH2)<1000)
+  //      {Mode="MQTT";}
+  //   }
+ if(Mode=="MQTT")
+  { u8g2.drawGlyph(0,26,0x25ba);
+    
+    if(analogRead(CH2)<1000)
       {Mode="Median";}
   }
   else if(Mode=="Median")
-  {u8g2.drawGlyph(0,52,0x25ba);
+  {u8g2.drawGlyph(0,39,0x25ba);
    if(analogRead(CH2)>3000)
       {Mode="MQTT";}
   }
@@ -477,11 +475,11 @@ void Show0()
 {
   ShowMode();
   u8g2.setCursor(0, 35);
-  u8g2.print("Ym：");
+  u8g2.print("Speed：");
   u8g2.setCursor(45, 35);
   u8g2.print(Ym); 
   u8g2.setCursor(0, 51);
-  u8g2.print("Fx：");
+  u8g2.print("Directon：");
   u8g2.setCursor(45, 51);
   u8g2.print(Fx); 
 }
@@ -504,22 +502,22 @@ delay(500);
   ShowMode();
   ShowVbat();
   u8g2.drawStr(10,33,mqttServer1);
-  u8g2.drawStr(10,55,"My Mqtt Server");
-  if(Server==mqttServer1)
-  {
-    u8g2.drawFrame(0, 22, 128, 15);
-    if(analogRead(CH2)<1200)
-      {Server=mqttServer2;
-      LeCar.d=2;
-      }
-    }
-   else if( Server==mqttServer2)
-  {
-    u8g2.drawFrame(0, 44, 128, 15);
-    if(analogRead(CH2)>2800)
-    {Server=mqttServer1;
-    LeCar.d=1;}
-    }
+  // u8g2.drawStr(10,55,"Sever NC");
+  // if(Server==mqttServer1)
+  // {
+  //   u8g2.drawFrame(0, 22, 128, 15);
+  //   if(analogRead(CH2)<1200)
+  //     {Server=mqttServer2;
+  //     LeCar.d=2;
+  //     }
+  //   }
+  //  else if( Server==mqttServer2)
+  // {
+  //   u8g2.drawFrame(0, 44, 128, 15);
+  //   if(analogRead(CH2)>2800)
+  //   {Server=mqttServer1;
+  //   LeCar.d=1;}
+  //   }
     if(digitalRead(CH5)==0)
     {
      Select0="Ok";}
@@ -540,7 +538,7 @@ void GetMedian()
   for(int i=0;i<jccs;i++)
    {Ym0 = analogRead(CH2); //读取油门值
     Fx0 = analogRead(CH3); //读取方向值
-    //Serial.print(i);Serial.print("   ");Serial.print(Ym0);Serial.print(";");Serial.println(Fx0);
+   Serial.print(i);Serial.print("   ");Serial.print(Ym0);Serial.print(";");Serial.println(Fx0);
     if(Ym0>YmMax)
     {YmMax=Ym0;
     Yml=i;}
