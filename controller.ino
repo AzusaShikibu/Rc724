@@ -34,15 +34,15 @@ const char* Server=mqttServer1;
 
 int zoyvb
 int zoxvb
-//typedef struct struct_message {
-//  int a;//油门
-//  int b;//方向
-//  char c;
-//  int d;
-//  int e;
-//  int f=70;//发射器方向
-//} struct_message;
-//struct_message LeCar;
+typedef struct struct_message {
+ int a;//油门
+ int b;//方向
+ char c;
+ int d;
+ int e;
+ int f=70;//发射器方向
+} struct_message;
+struct_message LeCar;
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 
@@ -165,7 +165,7 @@ if (Ym0 > YmMedian + 100)
   strcpy(publishMsg, messageString.c_str());
   // 实现ESP32向主题发布信息
   if(mqttClient.publish(publishTopic, publishMsg)){
-  //  Serial.println(publishMsg); 
+Serial.println(publishMsg); 
   ShowOk();
   } else {
     ShowFail();
@@ -174,7 +174,7 @@ if (Ym0 > YmMedian + 100)
 }
 
 void beginMode(){
-  Mode="Now";
+  Mode="MQTT";
   delay(500);
  while(1)
  {ShowMode();
@@ -213,7 +213,7 @@ void pdMode()
   
   isRun=1;
   ShowSetServer();
-  esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &LeCar, sizeof(LeCar));
+  esp_err_t result = esp_now_send(broadcastAddress, zoyvb, zoxvb);
   connectWifi();
   mqttClient.setServer(Server, port);
   connectMQTTServer();}
