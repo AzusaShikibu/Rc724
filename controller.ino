@@ -35,9 +35,9 @@ const char* Server=mqttServer1;
 int zoyvb
 int zoxvb
 typedef struct struct_message {
- int a;//油门
- int b;//方向
- char c;
+//  int a;//油门
+//  int b;//方向
+//  char c;
  int d;
  int e;
  int f=70;//发射器方向
@@ -46,7 +46,7 @@ struct_message LeCar;
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 
- esp_now_peer_info_t peerInfo;
+esp_now_peer_info_t peerInfo;
 
 
 
